@@ -38,12 +38,18 @@ else
 fi
 export CONFIG=$ENVIRONMENT
 
+export GPU=$4
+export PORT_ST=$5
+export PORT_ND=$6
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 docker/build.sh
 docker_version=$(docker version --format '{{.Server.Version}}')
 if [[ "19.03" > $docker_version ]]; then
-  docker run --entrypoint ./docker/run.sh -ti -it -p 6006-6015:6006-6015 --name seed --rm seed_rl:$ENVIRONMENT $ENVIRONMENT $AGENT $NUM_ACTORS $ENV_BATCH_SIZE $@
+  docker run --entrypoint ./docker/run.sh -ti -it -p 26006-26015:6006-6015 --name seed --rm seed_rl:$ENVIRONMENT $ENVIRONMENT $AGENT $NUM_ACTORS $ENV_BATCH_SIZE $@
 else
-  docker run --gpus all --entrypoint ./docker/run.sh -ti -it -p 6006-6015:6006-6015 -e HOST_PERMS="$(id -u):$(id -g)" --name seed --rm seed_rl:$ENVIRONMENT $ENVIRONMENT $AGENT $NUM_ACTORS $ENV_BATCH_SIZE $@
+  docker run \
+      --device=/dev/nvidiactl --device=/dev/nvidia-uvm --runtime nvidia --device=/dev/nvidia$GPU \
+      -e NVIDIA_VISIBLE_DEVICES=$GPU \
+      --entrypoint ./docker/run.sh -ti -it -p $PORT_ST-$PORT_ND:6006-6015 -e HOST_PERMS="$(id -u):$(id -g)" --name seed2 --rm seed_rl:$ENVIRONMENT $ENVIRONMENT $AGENT $NUM_ACTORS $ENV_BATCH_SIZE $@
 fi

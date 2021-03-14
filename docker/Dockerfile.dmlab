@@ -49,9 +49,10 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
 # We explicitly set the Numpy path as shown here:
 # https://github.com/deepmind/lab/blob/master/docs/users/build.md
 RUN NP_INC="$(python3 -c 'import numpy as np; print(np.get_include()[5:])')" && \
-    git clone https://github.com/deepmind/lab.git && \
+    #git clone https://github.com/deepmind/lab.git && \
+    git clone https://github.com/jsikyoon/lab.git --branch jsik/gr_seed_rl && \
     cd lab && \
-    git checkout 937d53eecf7b46fbfc56c62e8fc2257862b907f2 && \
+    #git checkout 937d53eecf7b46fbfc56c62e8fc2257862b907f2 && \
     sed -i 's@python3.5@python3.6@g' python.BUILD && \
     sed -i 's@glob(\[@glob(["'"$NP_INC"'/\*\*/*.h", @g' python.BUILD && \
     sed -i 's@: \[@: ["'"$NP_INC"'", @g' python.BUILD && \

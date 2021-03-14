@@ -22,7 +22,7 @@ from absl import logging
 
 import gym
 import numpy as np
-from seed_rl.common import common_flags  
+from seed_rl.common import common_flags
 from seed_rl.dmlab import games
 import tensorflow as tf
 
@@ -35,7 +35,8 @@ flags.DEFINE_string(
     'dataset_path', '', 'Path to dataset needed for psychlab_*, see '
     'https://github.com/deepmind/lab/tree/master/data/brady_konkle_oliva2008')
 
-flags.DEFINE_string('game', 'explore_goal_locations_small', 'Game/level name.')
+#flags.DEFINE_string('game', 'explore_goal_locations_small', 'Game/level name.')
+flags.DEFINE_string('game', 'rooms_watermaze', 'Game/level name.')
 flags.DEFINE_integer('width', 96, 'Width of observation.')
 flags.DEFINE_integer('height', 72, 'Height of observation.')
 flags.DEFINE_string('level_cache_dir', None, 'Global level cache directory.')
